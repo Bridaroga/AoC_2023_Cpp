@@ -64,6 +64,8 @@ int main() {
     for (size_t i = 0; i < nodosFinalA.size(); i++) {
         itInstrucciones = instrucciones.begin();
         itNodos = nodos.find(nodosFinalA[i]);
+
+        // Cuenta los pasos desde cada nodo inicial hasta el final.
         while (itNodos->first[2] != 'Z') {
             if (*itInstrucciones == 'L') {
                 itNodos = nodos.find(std::get<0>(itNodos->second));
@@ -79,6 +81,9 @@ int main() {
             }
         }
 
+        // Calcula el mcm de los pasos ya calculados por cada nodo.
+        // No sé como funciona, ¬_¬
+        // Bueno, sí sé como funciona, pero no entiendo de dónde salió el algoritmo.
         if (i == 0) {
             mcm = contador;
         } else {
