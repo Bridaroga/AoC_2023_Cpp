@@ -8,6 +8,8 @@
 #include <tuple>
 #include <vector>
 
+typedef std::map<std::string, std::tuple<std::string, std::string>> mapa;
+
 int main() {
     std::ifstream networkDocument("Network.txt");
 
@@ -26,8 +28,13 @@ int main() {
     size_t contador{ 0 };
     size_t contadorNodos{ 0 };
 
-    std::map<std::string, std::tuple<std::string, std::string>> nodos{};
-    //std::map<std::string, std::tuple<std::string, std::string>>::iterator itNodos;
+    // Valores para hallar el mcm
+    size_t residuo{ 0 };
+    size_t mcm{ 0 };
+    size_t producto{ 0 };
+
+    mapa nodos{};
+    mapa::iterator itNodos;
 
     std::vector<std::string> nodosFinalA{};
 
@@ -54,29 +61,40 @@ int main() {
         }
     }
 
-    itInstrucciones = instrucciones.begin();
-
-    while (contadorNodos != nodosFinalA.size()) {
-        contadorNodos = 0;
-        for (auto& it : nodosFinalA) {
+    for (size_t i = 0; i < nodosFinalA.size(); i++) {
+        itInstrucciones = instrucciones.begin();
+        itNodos = nodos.find(nodosFinalA[i]);
+        while (itNodos->first[2] != 'Z') {
             if (*itInstrucciones == 'L') {
-                it = std::get<0>(nodos.find(it)->second);
+                itNodos = nodos.find(std::get<0>(itNodos->second));
             }
             else {
-                it = std::get<1>(nodos.find(it)->second);
+                itNodos = nodos.find(std::get<1>(itNodos->second));
             }
 
-            if (it[2] == 'Z') {
-                contadorNodos++;
+            contador++;
+            itInstrucciones++;
+            if (itInstrucciones == instrucciones.end()) {
+                itInstrucciones = instrucciones.begin();
             }
         }
 
-        contador++;
-        itInstrucciones++;
-        if (itInstrucciones == instrucciones.end()) {
-            itInstrucciones = instrucciones.begin();
+        if (i == 0) {
+            mcm = contador;
+        } else {
+            producto = mcm * contador;
+
+            do {
+                residuo = mcm % contador;
+                mcm = contador;
+                contador = residuo;
+            } while (residuo != 0);
+
+            mcm = producto / mcm;
         }
+
+        contador = 0;
     }
 
-    std::cout << contador << '\n';
+    std::cout << mcm << '\n';
 }
