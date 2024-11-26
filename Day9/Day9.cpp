@@ -3,13 +3,13 @@
 #include <string>
 #include <vector>
 
-std::vector<int> valorExtrapolado(const std::string& linea) {
+// Convierte cada línea de String a un Vector<int>
+std::vector<int> stringToVector(const std::string& linea) {
     std::vector<int> valores {};
     std::string numero { "" };
-    std::size_t inicioNumero { 0 };
 
     for (std::size_t i = 0; i < linea.size(); i++) {
-        inicioNumero = linea.find_first_of("-0123456789", i);
+        std::size_t inicioNumero { linea.find_first_of("-0123456789", i) };
         std::size_t tempIndex = linea.find(' ', inicioNumero);
         if (tempIndex != std::string::npos) {
             i = tempIndex;
@@ -28,8 +28,23 @@ std::vector<int> valorExtrapolado(const std::string& linea) {
     return valores;
 }
 
-void restaValores(std::vector<int> numeros) {
-    
+int restaValores(std::vector<int> numeros) {
+    std::size_t contador { 0 };
+    std::size_t tamaño { numeros.size() };
+    for (std::size_t i { 0 }; i < tamaño - 1; i++) {
+        numeros[i] = numeros[i + 1] - numeros[i];
+        if (numeros[i] == 0) {
+            contador++;
+        }
+    }
+
+    if (contador == tamaño - 1) {
+        return numeros[tamaño - 1];
+    } else {
+        //numeros.pop_back();
+    }
+
+    return 0;
 }
 
 
@@ -43,8 +58,8 @@ int main() {
 
     while (!oasisDocument.eof()) {
         std::getline(oasisDocument, lineaReporte);
-        vectorNumeros = valorExtrapolado(lineaReporte);
-
+        vectorNumeros = stringToVector(lineaReporte);
+        sumaExtrapolada += restaValores(vectorNumeros);
 
         vectorNumeros.clear();
     }
