@@ -41,7 +41,9 @@ int restaValores(std::vector<int> numeros) {
     if (contador == tamaño - 1) {
         return numeros[tamaño - 1];
     } else {
-        //numeros.pop_back();
+        int último {numeros[tamaño - 1]};
+        numeros.pop_back();
+        return restaValores(numeros) + último;
     }
 
     return 0;
