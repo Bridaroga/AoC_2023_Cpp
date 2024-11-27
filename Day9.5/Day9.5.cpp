@@ -28,7 +28,8 @@ std::vector<int> stringToVector(const std::string& linea) {
     return valores;
 }
 
-int restaValores(std::vector<int> numeros) {
+int sumaPrimerNumero(std::vector<int> numeros) {
+    int primero { numeros[0] };
     std::size_t contador { 0 };
     std::size_t tamaño { numeros.size() };
     for (std::size_t i { 0 }; i < tamaño - 1; i++) {
@@ -39,17 +40,14 @@ int restaValores(std::vector<int> numeros) {
     }
 
     if (contador == tamaño - 1) {
-        return numeros[tamaño - 1];
+        return primero;
     } else {
-        int último {numeros[tamaño - 1]};
         numeros.pop_back();
-        return restaValores(numeros) + último;
+        return primero - sumaPrimerNumero(numeros);
     }
 
     return 0;
 }
-
-
 
 int main() {
     std::ifstream oasisDocument("OASIS.txt");
@@ -61,7 +59,7 @@ int main() {
     while (!oasisDocument.eof()) {
         std::getline(oasisDocument, lineaReporte);
         vectorNumeros = stringToVector(lineaReporte);
-        sumaExtrapolada += restaValores(vectorNumeros);
+        sumaExtrapolada += sumaPrimerNumero(vectorNumeros);
 
         vectorNumeros.clear();
     }
