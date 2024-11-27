@@ -28,7 +28,8 @@ std::vector<int> stringToVector(const std::string& linea) {
     return valores;
 }
 
-int restaValores(std::vector<int> numeros) {
+// Suma el último número de cada vector interno de forma recursiva.
+int sumaUltimoNumero(std::vector<int> numeros) {
     std::size_t contador { 0 };
     std::size_t tamaño { numeros.size() };
     for (std::size_t i { 0 }; i < tamaño - 1; i++) {
@@ -43,7 +44,7 @@ int restaValores(std::vector<int> numeros) {
     } else {
         int último {numeros[tamaño - 1]};
         numeros.pop_back();
-        return restaValores(numeros) + último;
+        return sumaUltimoNumero(numeros) + último;
     }
 
     return 0;
@@ -61,7 +62,7 @@ int main() {
     while (!oasisDocument.eof()) {
         std::getline(oasisDocument, lineaReporte);
         vectorNumeros = stringToVector(lineaReporte);
-        sumaExtrapolada += restaValores(vectorNumeros);
+        sumaExtrapolada += sumaUltimoNumero(vectorNumeros);
 
         vectorNumeros.clear();
     }
